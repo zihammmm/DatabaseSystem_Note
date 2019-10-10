@@ -422,7 +422,72 @@ $R \subseteq D_{1}*D_{2}*...*D_{n}$
       > 目的:可以在SELECT子句中针对不同的元组集合分别进行统计计算，实现分类统计查询
     * 可以在同一条SQL语句中同时执行多个统计计算
     * 任何没有出现在GROUP BY子句中的属性如果出现在SELECT子句中，它只能出现在聚集函数内部，否则错误
-+ SELECT语句使用的一般规则
+    * 分组查询子句:**HAVING group_condition**  
+    > 根据GROUP BY子句的分组结果，定义分组查询条件
+
++ SELECT语句使用的一般规则  
+  - 映像语句的处理顺序
+    * 合并FROM子句中的表(笛卡尔乘积)
+    * 利用WHERE子句中的条件进行元组选择
+    * 根据GROUP BY子句对保留下来的元组进行分组
+    * 利用HAVING子句中的条件对分组后的元组集合进行选择
+    * 根据SELECT子句进行统计计算，生成结果关系中的元组
+    * 根据ORDER BY子句对查询结果进行排序
 ### SQL的更新功能
++ 删除功能
+> DELETE FROM table_name [WHERE search_condition];  
+
+没有+WHERE速度慢(有日志)
+
++ 元组插入功能
+> INSERT INTO tabname [(colname {, colname...})] VALUES (expr | NULL {,expr|NULL...}) | subquery; 
+
+![](images/3.3.4.0.png)
+
++ 修改功能
+> UPDATE table_name SET colname=expr | NULL |subquery,... [WHERE search_condition];  
+
+用SET子句中的赋值语句修改相关元组上的属性值
 ### 视图
++ 视图
+> 由若干张表经映像语句构筑而成的表(导出表)
+  - 与基表的区别:
+    * 视图并不实际存在于数据库内，而仅仅保留了其构造信息，又被称为虚表。
+    * 执行视图上的访问操作时，数据库管理系统转换为相应基表上的访问操作。
+  - 定义:
+    > CREATE VIEW <视图名> [(<列名>{,<列名>...})] AS <映像语句> [WITH CHECK OPTION]  
+    * 映像语句所得到的查询结果即为该视图中的元组
+    * 如果没有给视图中的属性命名，则用映像语句中的SELECT子句中的属性名作为视图属性的属性名。否则视图中的属性必须与SELECT子句中的结果属性一一对应
+    * WITH CHECK OPTION用于约束视图上的修改操作
+  - 视图的嵌套定义
+  > 可以利用已有的视图定义新的视图
+
+  - 视图的删除
+  > DROP VIEW <视图名>  
+  > 在执行视图的删除操作时，将连带删除定义在该视图上的其他视图
+
+  - 视图上的操作
+    * 对视图可以作查询操作
+    * 一般不允许执行视图上的更新操作，只有在特殊情况下才可以进行
+    > 视图的每一行(列)对应基表的唯一一行(列)
+  
+  - 视图的优点
+    * 提高了数据独立性
+    * 简化用户观点
+    * 提供自动的安全保护功能
 ### DB2 SQL
++ 日期的比较
++ 日期时间的数学计算
++ 表连接
+  - 内连接
+    > 只从叉积中返回满足连接条件的行
+    > FROM子句中用INNER JOIN操作符来实现
+  - 外连接
+    > 返回内连接操作生成的行，以及内连接操作无法返回的行
+    * 左外连接:包括内连接和在左表中但内连接不会返回的那些行(LEFT OUTER JOIN/ LEFT JOIN)
+    * 右外连接:RIGHT OUTER JOIN (RIGHT JOIN)
+    * 全外连接:FULL OUTER JOIN(FULL JOIN)
++ UPDATE
+> UPDATE语句用于改变表或试图中的数据
+
+![](images/3.3.4.1.png)
