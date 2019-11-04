@@ -233,4 +233,4 @@
 ![](images/4.2.4.2.png)
 
 #### 触发器的删除命令
-> DROP TRIGGER trigger_name
+> DROP TRIGGER trigger_name  
